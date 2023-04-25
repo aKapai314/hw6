@@ -22,3 +22,5 @@ int main(int argc, char* argv[])
     cout << "h(" << k << ")=" << hk << endl;
     return 0;
 }
+
+//("9999999999999999999999999999");

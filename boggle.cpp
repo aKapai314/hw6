@@ -10,7 +10,7 @@
 #endif
 
 #include "boggle.h"
-
+using namespace std;
 std::vector<std::vector<char> > genBoard(unsigned int n, int seed)
 {
 	//random number generator
@@ -95,5 +95,42 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
+//	cout << "checking row: " << r << " and column: " << c << endl;
+	//cout << "word is " << word << endl;
+
+	if(r >= board.size() || c >= board.size()){
+		if(dict.find(word) != dict.end()){
+			result.insert(word);
+			return true;
+		}
+		//cout << "out of range" << endl;
+		return false;
+	}
+
+	if(dict.find(word) != dict.end()){ //we have found a word!
+		if(boggleHelper(dict, prefix, board, word + board[r].at(c), result, r + dr, c + dc, dr, dc) == false){
+			result.insert(word);
+			//cout << "word is valid, longest word possible" << endl;
+			return true;
+		}
+		else{
+			//cout << "word is not longest, looking for longer" << endl;
+			return boggleHelper(dict, prefix, board, word + board[r].at(c), result, r + dr, c + dc, dr, dc);
+		}
+	}
+	else if(prefix.find(word) != prefix.end()){ //if the word you are working with is a prefix for another word
+		return boggleHelper(dict, prefix, board, word + board[r].at(c), result, r + dr, c + dc, dr, dc);
+
+	}
+	else{
+		return false;
+	}
+
+
+
+
+
+
+
 
 }
