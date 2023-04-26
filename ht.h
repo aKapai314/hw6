@@ -6,7 +6,6 @@
 
 typedef size_t HASH_INDEX_T;
 
-using namespace std;
 
 // Complete - Base Prober class
 template <typename KeyType>
@@ -360,19 +359,12 @@ void HashTable<K,V,Prober,Hash,KEqual>::insert(const ItemType& p)
 {
 
 	//check if need to be resized
-	
-	//get the next open spot 
-		//use the PROBE functions
-	//check if the index is null, insert it into the table, increment counts
-	//cout << "lf is " << loadingFactor_ << endl;
 	if(loadingFactor_ >= resizeAlpha_)
 		resize();
 	
 	HashItem* x = new HashItem(p);
 	insertHelper(x);
-	//cout << "num elements is " << numElements_ << endl;
 	loadingFactor_ = double(numElements_)/CAPACITIES[mIndex_];
-	//cout << "lf pt 2 is " << loadingFactor_ << endl;
 }
 
 
@@ -382,6 +374,7 @@ void HashTable<K,V,Prober,Hash,KEqual>::insertHelper(HashItem* x)
 	K key = x->item.first;
 	HASH_INDEX_T h = this->probe(key);
 	if(h == npos){
+		delete x;
 		throw std::logic_error("no");
 		return;
 		//throw expection
@@ -417,9 +410,7 @@ void HashTable<K,V,Prober,Hash,KEqual>::remove(const KeyType& key)
 template<typename K, typename V, typename Prober, typename Hash, typename KEqual>
 typename HashTable<K,V,Prober,Hash,KEqual>::ItemType const * HashTable<K,V,Prober,Hash,KEqual>::find(const KeyType& key) const
 {
-		//cout << "looking for " << key << endl;
     HASH_INDEX_T h = this->probe(key);
-		//cout << "h is " << h << endl;
     if((npos == h) || nullptr == table_[h] ){
         return nullptr;
     }
@@ -430,11 +421,8 @@ typename HashTable<K,V,Prober,Hash,KEqual>::ItemType const * HashTable<K,V,Probe
 template<typename K, typename V, typename Prober, typename Hash, typename KEqual>
 typename HashTable<K,V,Prober,Hash,KEqual>::ItemType * HashTable<K,V,Prober,Hash,KEqual>::find(const KeyType& key)
 {
-		//cout << "looking for " << key << endl;
     HASH_INDEX_T h = this->probe(key);
-		//cout << "h is " << h << endl;
     if((npos == h) || nullptr == table_[h] ){
-			//cout << "gonna return null" << endl;
         return nullptr;
     }
     return &table_[h]->item;
@@ -491,21 +479,16 @@ void HashTable<K,V,Prober,Hash,KEqual>::resize()
 	mIndex_++;
 	if(mIndex_ >= 28)
 		return;
-	//cout << "resizing" << endl;
 	std::vector<HashItem*> newTable;
 	std::vector<HashItem*> oldTable = table_;
 	for(size_t i = 0; i < CAPACITIES[mIndex_]; i++){
 		newTable.push_back(nullptr);
-		//cout << "resizing, adding nullptr: " << i << endl;
 	}
 	table_ = newTable;
 	numElements_ = 0;
 	numNonDeleted_ = 0;
-	//cout << "old table size is " << table_.size() << endl;
 	for(size_t i = 0; i < oldTable.size(); i++){
-		//cout << "going through table, at index " << i << endl;
 		if(oldTable[i] != nullptr){
-			//cout << "value is not nullptr, index is " << i << endl;
 			if(oldTable[i]->deleted == false){ //rehash
 				HashItem* x = oldTable[i];
 				insertHelper(x);
@@ -533,7 +516,6 @@ HASH_INDEX_T HashTable<K,V,Prober,Hash,KEqual>::probe(const KeyType& key) const
     {
 				
         if(nullptr == table_[loc] ) {
-					//cout << "in here!" << endl;
             return loc;
 					
         }

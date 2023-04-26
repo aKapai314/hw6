@@ -23,33 +23,21 @@ struct MyStringHash {
     {
         // Add your code here
 
-				if(k == "9999999999999999999999999999")
-					return 7116200424364995040;
+				
+        unsigned long long k_conv[30] = {0};
 
-        int k_conv[30] = {0};
         for(size_t i = 0; i < k.length(); i++){
             k_conv[30 - k.length() + i] = letterDigitToNumber(k[i]);
         }
-				/*cout << "k conv is " << endl;
-				for(size_t i = 0; i < 30; i++)
-					cout << k_conv[i] << endl;
-        */
 				unsigned long long w[5]; 
-        
+
         size_t ct = 0; 
-				//cout << "w vector is " << endl;
         for(int i = 0; i < 5; i++){   
             w[i] = ((((k_conv[0+ct]*36 + k_conv[1+ct])*36 + k_conv[2+ct])*36 + k_conv[3+ct])*36 + k_conv[4+ct])*36 + k_conv[5+ct];
-            //cout << w[i] << endl;
             ct+=6;
         }
 
         unsigned long long hashVal = 0;
-
-				/*cout << "r values are " << endl;
-				for(int i = 0; i < 5; i++)
-					cout << rValues[i] << endl;
-				*/
         hashVal = rValues[0]*w[0] + rValues[1]*w[1] + rValues[2]*w[2] + rValues[3]*w[3] + rValues[4]*w[4];
 
         return hashVal;
@@ -67,7 +55,6 @@ struct MyStringHash {
 				}
 				else{
 					retVal = int(letter) - 22;
-					//cout << "retval is " << retVal << endl;
 				}
 
 				return retVal;
