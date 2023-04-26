@@ -8,7 +8,6 @@
 #include <array>
 
 typedef std::size_t HASH_INDEX_T;
-using namespace std;
 
 struct MyStringHash {
     HASH_INDEX_T rValues[5] { 983132572, 1468777056, 552714139, 984953261, 261934300 };
